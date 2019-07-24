@@ -1,6 +1,7 @@
 // error: code, text
 // logger: info, warn, fail, exit
 // assert: that works in release builds.
+// hexdump
 
 #ifndef ERROR_H
 #define ERROR_H
@@ -89,3 +90,21 @@ __thread char* ERRORTEXT = "No error 0";
 #   undef  assert
 #   define assert(expr) (void)0
 #endif
+
+// --------------
+
+static
+void hexdump( const void *ptr, int len ) {
+    int width = 16;
+    char hexbuf[256], strbuf[256], *data = (char*)ptr;
+    for( int jt = 0; jt < len; jt += width ) {
+        char *hex = hexbuf, *str = strbuf;
+        for( int it = jt, next = it + width; it < len && it < next; ++it, ++data ) {
+            hex += sprintf( hex, "%02x ", /*"0x%02x,",*/ (unsigned char)*data);
+            str += sprintf( str, "%c", *data >= 32 && *data != '\\' ? *data : '.' );
+        }
+        //LOGINFO( HEX|DUMP, "%s%*.s// %06x %-16s"
+        printf("%s%*.s// %06x %-16s\n", 
+        hexbuf, (int)(width * 3 /*5*/ - (hex - hexbuf)), hexbuf, jt, strbuf );
+    }
+}

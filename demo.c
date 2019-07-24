@@ -62,13 +62,13 @@ size_t dlmalloc_usable_size(void*); // (android)
 #define TYPES_C
 #define VM_C
 
-#include "ds.h"     //   0%
-#include "error.h"  // 100%
-#include "memory.h" // 100%
-#include "object.h" //   0%
-#include "stream.h" //   0%
-#include "types.h"  //   0%
-#include "vm.h"     //   0%
+#include "ds.h"     // 4/17
+#include "error.h"  // 4/ 4
+#include "memory.h" // 4/ 4
+#include "object.h" // 0/ 5
+#include "stream.h" // 0/11
+#include "types.h"  // 7/19
+#include "vm.h"     // 0/18
 
 // demo
 
@@ -80,12 +80,19 @@ int main() {
     int passed = 0; assert(++passed); // check that assert() works in release builds
     LOGINFO(#main #init, "%s v%o", TITLE, VERSION);
     LOGINFO(#main #init, " %s assert() - %s", passed ? "working" : "faulty", ERRORTEXT);
+    hexdump("hi", 2);
 
     // demo: memory.c
-    int *p = xrealloc(0, sizeof(int)); *p = 42;
-    int *v100 = stack(100 * sizeof(int)); *v100 = 42;
-    char *buf = stackf("hello world %d", 123);
-    puts(buf);
+    int *t = stack(123); *t = 42;
+    int *p = xrealloc(0, sizeof(int)); *p = 42; assert( xlen(p) == sizeof(int) );
+    int *v = vrealloc(0, sizeof(int)); *v = 42; assert( vlen(v) >= sizeof(int) );
+    char*s = va("hello world %d", 123);
+    printf("str:%s hash:%x len:%d cmp:%d\n", s, va_hash(s), va_len(s), va_cmp(s, va("hello world %d", 123)));
+
+    // demo: quarks
+    int id1 = quark_intern("hello world");
+    int id2 = quark_intern("hello world");
+    printf("#%d: %s (%d bytes) (%x hash) (%d cmp)\n", id1, quark_str(id1), quark_len(id1), quark_hash(id1), quark_cmp(id1, id2));
 
     LOGEXIT(#main #quit, "exiting...");
 }
