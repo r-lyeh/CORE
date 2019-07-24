@@ -63,8 +63,8 @@ size_t dlmalloc_usable_size(void*); // (android)
 #define VM_C
 
 #include "ds.h"     //   0%
-#include "error.h"  //   0%
-#include "memory.h" //   0%
+#include "error.h"  // 100%
+#include "memory.h" // 100%
 #include "object.h" //   0%
 #include "stream.h" //   0%
 #include "types.h"  //   0%
@@ -76,10 +76,16 @@ size_t dlmalloc_usable_size(void*); // (android)
 #define VERSION 0100
 
 int main() {
-    // error.c demo
+    // demo: error.c
     int passed = 0; assert(++passed); // check that assert() works in release builds
     LOGINFO(#main #init, "%s v%o", TITLE, VERSION);
     LOGINFO(#main #init, " %s assert() - %s", passed ? "working" : "faulty", ERRORTEXT);
+
+    // demo: memory.c
+    int *p = xrealloc(0, sizeof(int)); *p = 42;
+    int *v100 = stack(100 * sizeof(int)); *v100 = 42;
+    char *buf = stackf("hello world %d", 123);
+    puts(buf);
 
     LOGEXIT(#main #quit, "exiting...");
 }
