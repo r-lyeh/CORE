@@ -76,4 +76,10 @@ size_t dlmalloc_usable_size(void*); // (android)
 #define VERSION 0100
 
 int main() {
+    // error.c demo
+    int passed = 0; assert(++passed); // check that assert() works in release builds
+    LOGINFO(#main #init, "%s v%o", TITLE, VERSION);
+    LOGINFO(#main #init, " %s assert() - %s", passed ? "working" : "faulty", ERRORTEXT);
+
+    LOGEXIT(#main #quit, "exiting...");
 }
