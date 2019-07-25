@@ -1,6 +1,6 @@
-// types: vec2, vec3, vec4, half, ubyte, vbyte, zig, quarks
+// linear: vec2, vec3, vec4, half, ubyte, vbyte, zig
+// quarks:
 // buffer: interleave/quant/diff/delta/chunk/compress/packet/crypt/escape, serial/(un)pack (<->string)
-// string: utils
 
 #ifndef TYPES_H
 #define TYPES_H

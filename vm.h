@@ -1,7 +1,6 @@
 // vm: argcv/cvars/ini, math/physics, occlusion/ray, level/stream/world, scene/graph, worker/task, ram/lerp, message/event/loop/frameskip
 // dummy systems (plugins): audio, database, dev, gameplay, input, network, os, package, power, render, rpc/ipc, script, sysdir, vr, window...
 
-#if 0
 #ifdef _WIN
 #   define dlopen(name,mode)    (void*)LoadLibraryA( name )
 #   define dlsym(handle,symbol) GetProcAddress((HMODULE)handle, symbol )
@@ -33,4 +32,3 @@ extern void (*on_quit[256])(void);
 //extern void (*on_redo[256])();
 
 int start(int argc, char **argv);
-#endif
