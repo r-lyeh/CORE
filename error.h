@@ -1,7 +1,6 @@
 // error: code, text
 // logger: info, warn, fail, exit
 // assert: that works in release builds.
-// hexdump
 
 #ifndef ERROR_H
 #define ERROR_H
@@ -39,7 +38,7 @@ __thread char* ERRORTEXT = "No error 0";
 #if LOGLEVEL <= 0
 #   define LOG(tags, fmt, ...) (void)0
 #else
-#   define LOG(tags, fmt, ...) (fprintf(stderr,fmt,__VA_ARGS__), fprintf(stderr," (%s:%d) %s\n",__FILE__,__LINE__,#tags))
+#   define LOG(tags, fmt, ...) (fprintf(stderr,fmt,__VA_ARGS__),fprintf(stderr," (%s:%d) %s\n",SHORT_FILE,__LINE__,#tags))
 #endif
 
 #if LOGLEVEL >= 1
@@ -69,6 +68,13 @@ __thread char* ERRORTEXT = "No error 0";
 // EXTRA
 #define TODO(...)  do { static int todo  = 0; if(!todo ) { ++todo ; LOGINFO(TODO, __VA_ARGS__); } } while(0)
 #define FIXME(...) do { static int fixme = 0; if(!fixme) { ++fixme; LOGINFO(FIXME, __VA_ARGS__); } } while(0)
+
+// UTILS
+#ifdef _MSC_VER
+#define SHORT_FILE (strrchr(__FILE__,'\\') ? strrchr(__FILE__,'\\')+1 : __FILE__ )
+#else
+#define SHORT_FILE __FILE__
+#endif
 
 #endif
 
@@ -103,8 +109,6 @@ void hexdump( const void *ptr, int len ) {
             hex += sprintf( hex, "%02x ", /*"0x%02x,",*/ (unsigned char)*data);
             str += sprintf( str, "%c", *data >= 32 && *data != '\\' ? *data : '.' );
         }
-        //LOGINFO( HEX|DUMP, "%s%*.s// %06x %-16s"
-        printf("%s%*.s// %06x %-16s\n", 
-        hexbuf, (int)(width * 3 /*5*/ - (hex - hexbuf)), hexbuf, jt, strbuf );
+        LOGINFO(#HEX, "%s%*.s// %06x %-16s", hexbuf, (int)(width * 3 /*5*/ - (hex - hexbuf)), hexbuf, jt, strbuf);
     }
 }
